@@ -2284,3 +2284,7 @@ for (index, calorie) in calories.enumerated() {
 }
 
 print(maxValue)
+
+let sortedCalories = calories.sorted { $0 > $1 }
+
+print(sortedCalories[0] + sortedCalories[1] + sortedCalories[2])
