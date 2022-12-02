@@ -2519,15 +2519,9 @@ enum RPS {
         switch symbol {
         case "A":
             return .rock
-        case "X":
-            return .rock
         case "B":
             return .paper
-        case "Y":
-            return .paper
         case "C":
-            return .scissors
-        case "Z":
             return .scissors
         default:
             fatalError("Unknown symbol \(symbol)")
@@ -2548,6 +2542,19 @@ enum Result {
     case loss
     case draw
 
+    static func parse(symbol: String) -> Result {
+        switch symbol {
+        case "X":
+            return .loss
+        case "Y":
+            return .draw
+        case "Z":
+            return .win
+        default:
+            fatalError("Unknown symbol \(symbol)")
+        }
+    }
+
     var score: Int {
         switch self {
         case .win: return 6
@@ -2559,22 +2566,19 @@ enum Result {
 
 struct Round {
     let opponent: RPS
-    let response: RPS
+    let result: Result
 
-    var result: Result {
-        switch (response, opponent) {
-        case (.rock, .rock),
-            (.paper, .paper),
-            (.scissors, .scissors):
-            return .draw
-        case (.rock, .scissors),
-            (.scissors, .paper),
-            (.paper, .rock):
-            return .win
-        case (.scissors, .rock),
-            (.rock, .paper),
-            (.paper, .scissors):
-            return .loss
+    var response: RPS {
+        switch (result, opponent) {
+        case (.win, .paper): return .scissors
+        case (.win, .scissors): return .rock
+        case (.win, .rock): return .paper
+        case (.loss, .paper): return .rock
+        case (.loss, .scissors): return .paper
+        case (.loss, .rock): return .scissors
+        case (.draw, .paper): return .paper
+        case (.draw, .scissors): return .scissors
+        case (.draw, .rock): return .rock
         }
     }
 
@@ -2589,7 +2593,7 @@ func parse(_ input: String) -> [Round] {
         let components = line.components(separatedBy: " ")
         return Round(
             opponent: .parse(symbol: components[0]),
-            response: .parse(symbol: components[1])
+            result: .parse(symbol: components[1])
         )
     }
 }
