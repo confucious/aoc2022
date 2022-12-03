@@ -342,4 +342,15 @@ func findDuplicate(_ list: [Int]) -> Int {
     return first.intersection(second).first!
 }
 
+func findGroupDuplicates(_ lists: [[Int]]) -> [Int] {
+    return stride(from: 0, to: lists.count, by: 3)
+        .map { index in
+            let first = Set(lists[index])
+            let second = Set(lists[index+1])
+            let third = Set(lists[index+2])
+            return first.intersection(second).intersection(third).first!
+        }
+}
+
 print(parse(input).map { findDuplicate($0) }.reduce(0, +))
+print(findGroupDuplicates(parse(input)).reduce(0, +))
