@@ -582,8 +582,27 @@ func execute(_ data: (startState: State, instructions: [Instruction])) -> State 
     }
     return state
 }
+
+func execute2(_ data: (startState: State, instructions: [Instruction])) -> State {
+    let instructions = data.instructions
+    var state = data.startState
+    instructions.forEach { instruction in
+        var items: [String] = []
+        (0 ..< (instruction.quantity)).forEach { _ in
+            let item = state.stacks[instruction.fromIndex].popLast()!
+            items.insert(item, at: 0)
+        }
+        state.stacks[instruction.toIndex].append(contentsOf: items)
+    }
+    return state
+}
+
 print(execute(parse(sample, numStacks: 3)).stacks.map { $0.last! }.joined())
 
 print(execute(parse(input, numStacks: 9)).stacks.map { $0.last! }.joined())
 
+
+print(execute2(parse(sample, numStacks: 3)).stacks.map { $0.last! }.joined())
+
+print(execute2(parse(input, numStacks: 9)).stacks.map { $0.last! }.joined())
 
