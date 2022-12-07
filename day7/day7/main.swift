@@ -130,3 +130,25 @@ func walk(_ currentNode: Node, total: Int) -> Int {
 
 print(walk(root, total: 0))
 print(walk(parse(input), total: 0))
+
+let root2 = parse(input)
+let target = 30000000 - (70000000 - root2.dirSize)
+
+var allDirs: [(Int, String)] = []
+//var bestCandidate: (Int, String) = (Int.max, "na")
+func walk2(_ currentNode: Node) {
+    let dirSize = currentNode.dirSize
+    if dirSize >= target {
+        allDirs.append((dirSize, currentNode.path))
+//        if dirSize < bestCandidate.0 {
+//            bestCandidate = (dirSize, currentNode.path)
+//            print(bestCandidate)
+//        }
+    }
+    for child in currentNode.children.values {
+        walk2(child)
+    }
+}
+walk2(parse(input))
+print(allDirs.sorted(by: { $0.0 < $1.0}))
+//print(bestCandidate)
