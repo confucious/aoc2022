@@ -10,6 +10,44 @@ import Foundation
 struct Point: Equatable, Hashable {
     let x: Int
     let y: Int
+
+    func move(_ direction: Direction) -> Point {
+        switch direction {
+        case .up: return Point(x: x, y: y - 1)
+        case .down: return Point(x: x, y: y + 1)
+        case .left: return Point(x: x - 1, y: y)
+        case .right: return Point(x: x + 1, y: y)
+        }
+    }
+
+    func follow(lead: Point) -> Point {
+        let head = lead
+        var tail = self
+
+        switch (head.x - tail.x, head.y - tail.y) {
+        case (0, 2): tail = Point(x: head.x, y: head.y - 1)
+        case (0, -2 ): tail = Point(x: head.x, y: head.y + 1)
+        case (2, 0): tail = Point(x: head.x - 1, y: head.y)
+        case (-2, 0): tail = Point(x: head.x + 1, y: head.y)
+        case (1, 2),
+            (2, 1),
+            (2, 2): tail = Point(x: tail.x + 1, y: tail.y + 1)
+        case (1, -2),
+            (2, -1),
+            (2, -2): tail = Point(x: tail.x + 1, y: tail.y - 1)
+        case (-1, -2),
+            (-2, -1),
+            (-2, -2): tail = Point(x: tail.x - 1, y: tail.y - 1)
+        case (-1, 2),
+            (-2, 1),
+            (-2, 2): tail = Point(x: tail.x - 1, y: tail.y + 1)
+        default:
+            print("Ignored \(head.x - tail.x), \(head.y - tail.y)")
+            break
+        }
+        return tail
+    }
+
 }
 
 enum Direction {
@@ -18,34 +56,31 @@ enum Direction {
 
 struct State {
     var head = Point(x: 0, y: 0)
+    var node1 = Point(x: 0, y: 0)
+    var node2 = Point(x: 0, y: 0)
+    var node3 = Point(x: 0, y: 0)
+    var node4 = Point(x: 0, y: 0)
+    var node5 = Point(x: 0, y: 0)
+    var node6 = Point(x: 0, y: 0)
+    var node7 = Point(x: 0, y: 0)
+    var node8 = Point(x: 0, y: 0)
     var tail = Point(x: 0, y: 0)
 
     var tailVisited = Set<Point>(arrayLiteral: Point(x: 0, y: 0))
 
     mutating func moveHead(_ direction: Direction) {
-        switch direction {
-        case .up: head = Point(x: head.x, y: head.y - 1)
-        case .down: head = Point(x: head.x, y: head.y + 1)
-        case .left: head = Point(x: head.x - 1, y: head.y)
-        case .right: head = Point(x: head.x + 1, y: head.y)
-        }
+        head = head.move(direction)
+        node1 = node1.follow(lead: head)
+        print(node1)
+        node2 = node2.follow(lead: node1)
+        node3 = node3.follow(lead: node2)
+        node4 = node4.follow(lead: node3)
+        node5 = node5.follow(lead: node4)
+        node6 = node6.follow(lead: node5)
+        node7 = node7.follow(lead: node6)
+        node8 = node8.follow(lead: node7)
+        tail = tail.follow(lead: node8)
 
-        switch (head.x - tail.x, head.y - tail.y) {
-        case (0, 2): tail = Point(x: head.x, y: head.y - 1)
-        case (0, -2 ): tail = Point(x: head.x, y: head.y + 1)
-        case (2, 0): tail = Point(x: head.x - 1, y: head.y)
-        case (-2, 0): tail = Point(x: head.x + 1, y: head.y)
-        case (1, 2),
-            (2, 1): tail = Point(x: tail.x + 1, y: tail.y + 1)
-        case (1, -2),
-            (2, -1): tail = Point(x: tail.x + 1, y: tail.y - 1)
-        case (-1, -2),
-            (-2, -1): tail = Point(x: tail.x - 1, y: tail.y - 1)
-        case (-1, 2),
-            (-2, 1): tail = Point(x: tail.x - 1, y: tail.y + 1)
-        default:
-            break
-        }
         tailVisited.insert(tail)
     }
 }
