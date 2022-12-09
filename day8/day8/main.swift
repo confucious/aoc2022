@@ -59,6 +59,28 @@ struct Grid {
         }
         return false
     }
+
+    func score(x: Int, y: Int) -> Int {
+        if x == 0 || x == width - 1 || y == 0 || y == height - 1 {
+            return 0
+        }
+        var total = 1
+        let testValue = self[x, y]
+        total *= (1 + (stride(from: x - 1, through: 0, by: -1).enumerated().first { (_, xIndex) in
+            self[xIndex, y] >= testValue
+        }?.offset ?? x-1))
+        total *= (1 + (stride(from: y - 1, through: 0, by: -1).enumerated().first { (_, yIndex) in
+            self[x, yIndex] >= testValue
+        }?.offset ?? y-1))
+        total *= (1 + (stride(from: x + 1, through: width - 1, by: 1).enumerated().first { (_, xIndex) in
+            self[xIndex, y] >= testValue
+        }?.offset ?? width - x - 2))
+        total *= (1 + (stride(from: y + 1, through: width - 1, by: 1).enumerated().first { (_, yIndex) in
+            self[x, yIndex] >= testValue
+        }?.offset ?? height - y - 2))
+
+        return total
+    }
 }
 
 func parse(_ input: String) -> Grid {
@@ -85,4 +107,18 @@ func checkVisibility(grid: Grid) -> Int {
     return visible
 }
 
-print(checkVisibility(grid: parse(input)))
+func findHighestScore(grid: Grid) -> Int {
+    var maxValue = 0
+    for x in 0 ..< grid.width {
+        for y in 0 ..< grid.height {
+            maxValue = max(maxValue, grid.score(x: x, y: y))
+        }
+    }
+    return maxValue
+}
+
+//print(checkVisibility(grid: parse(input)))
+
+let grid = parse(sample)
+
+print(findHighestScore(grid: parse(input)))
