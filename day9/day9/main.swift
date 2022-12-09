@@ -42,7 +42,7 @@ struct Point: Equatable, Hashable {
             (-2, 1),
             (-2, 2): tail = Point(x: tail.x - 1, y: tail.y + 1)
         default:
-            print("Ignored \(head.x - tail.x), \(head.y - tail.y)")
+//            print("Ignored \(head.x - tail.x), \(head.y - tail.y)")
             break
         }
         return tail
@@ -71,7 +71,6 @@ struct State {
     mutating func moveHead(_ direction: Direction) {
         head = head.move(direction)
         node1 = node1.follow(lead: head)
-        print(node1)
         node2 = node2.follow(lead: node1)
         node3 = node3.follow(lead: node2)
         node4 = node4.follow(lead: node3)
