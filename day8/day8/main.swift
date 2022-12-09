@@ -30,34 +30,22 @@ struct Grid {
     }
 
     func isVisible(x: Int, y: Int) -> Bool {
-        if x == 0 || x == width - 1 {
-            return true
-        }
-        if y == 0 || y == height - 1 {
-            return true
-        }
         let testValue = self[x, y]
-        if (0 ..< x).allSatisfy({ xIndex in
+
+        return x == 0 || x == width - 1
+        || y == 0 || y == height - 1
+        || (0 ..< x).allSatisfy({ xIndex in
             self[xIndex, y] < testValue
-        }) {
-            return true
-        }
-        if ((x+1) ..< width).allSatisfy({ xIndex in
+        })
+        || ((x+1) ..< width).allSatisfy({ xIndex in
             testValue > self[xIndex, y]
-        }) {
-            return true
-        }
-        if (0 ..< y).allSatisfy({ yIndex in
+        })
+        || (0 ..< y).allSatisfy({ yIndex in
             self[x, yIndex] < testValue
-        }) {
-            return true
-        }
-        if ((y+1) ..< height).allSatisfy({ yIndex in
+        })
+        || ((y+1) ..< height).allSatisfy({ yIndex in
             testValue > self[x, yIndex]
-        }) {
-            return true
-        }
-        return false
+        })
     }
 
     func score(x: Int, y: Int) -> Int {
@@ -117,7 +105,7 @@ func findHighestScore(grid: Grid) -> Int {
     return maxValue
 }
 
-//print(checkVisibility(grid: parse(input)))
+print(checkVisibility(grid: parse(input)))
 
 let grid = parse(sample)
 
