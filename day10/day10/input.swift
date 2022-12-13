@@ -7,6 +7,12 @@
 
 import Foundation
 
+let mini = """
+noop
+addx 3
+addx -5
+"""
+
 let sample = """
 addx 15
 addx -11
