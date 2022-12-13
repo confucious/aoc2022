@@ -81,6 +81,8 @@
 			dependencies = (
 			);
 			name = day11;
+			packageProductDependencies = (
+			);
 			productName = day11;
 			productReference = AB94E44D294807B600B2EAFB /* day11 */;
 			productType = "com.apple.product-type.tool";
@@ -109,6 +111,9 @@
 				Base,
 			);
 			mainGroup = AB94E444294807B600B2EAFB;
+			packageReferences = (
+				AB94E459294811BB00B2EAFB /* XCRemoteSwiftPackageReference "BigInt" */,
+			);
 			productRefGroup = AB94E44E294807B600B2EAFB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -288,6 +293,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AB94E459294811BB00B2EAFB /* XCRemoteSwiftPackageReference "BigInt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/attaswift/BigInt";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = AB94E445294807B600B2EAFB /* Project object */;
 }
