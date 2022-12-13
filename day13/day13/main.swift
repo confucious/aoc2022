@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Item {
+enum Item: Equatable {
     case value(Int)
     case list([Item])
 }
@@ -76,7 +76,18 @@ func isInOrder(_ packet: (Item, Item)) -> Result {
     }
 }
 
-let packets = parse(input)
+func parse2(_ input: String) -> [Item] {
+    let extra = """
+
+[[2]]
+[[6]]
+"""
+    return (input + extra).components(separatedBy: "\n")
+        .filter { !$0.isEmpty }
+        .map { parse(line: $0).item! }
+}
+
+let packets = parse(sample)
 print(packets.enumerated()
     .filter { values in
         return isInOrder(values.element) == .inOrder
@@ -84,3 +95,12 @@ print(packets.enumerated()
     .reduce(0) { partialResult, values in
         return partialResult + values.offset + 1
     })
+
+let packets2 = parse2(input)
+let sorted = packets2.sorted { a, b in
+    isInOrder((a, b)) == .inOrder
+}
+
+let first = sorted.firstIndex(where: { $0 == Item.list([Item.list([Item.value(2)])])})!
+let second = sorted.firstIndex(where: { $0 == Item.list([Item.list([Item.value(6)])])})!
+print(first + 1, second + 1, (first + 1) * (second + 1))
