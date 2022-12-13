@@ -58,9 +58,9 @@ struct Map {
     }
 }
 
-func search(_ map: Map) {
+func search(_ map: Map, startingAt point: Point) -> Int? {
     var stepMap = [Point:Int]()
-    var candidates = Set([map.start])
+    var candidates = Set([point])
     stepMap[map.start] = 0
 
     var numSteps = 0
@@ -76,7 +76,6 @@ func search(_ map: Map) {
 
     while !candidates.isEmpty {
         numSteps += 1
-        print("\(numSteps): \(candidates)")
         candidates = Set(candidates.flatMap { candidate in
             let originHeight = map.grid[candidate]!
             return [Direction.up, .down, .left, .right]
@@ -91,12 +90,23 @@ func search(_ map: Map) {
                 return true
             }
         })
-        print("\(numSteps): \(candidates)")
         candidates.forEach { candidate in
             stepMap[candidate] = numSteps
         }
     }
-    print(stepMap[map.end]!)
+    return stepMap[map.end]
 }
 
-search(Map(input: input))
+let map = Map(input: input)
+print(search(map, startingAt: map.start))
+
+print(
+    map.grid.compactMap { (start, height) in
+        if height == 0 {
+            return search(map, startingAt: start)
+        } else {
+            return nil
+        }
+    }.min()
+)
+
